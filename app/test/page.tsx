@@ -120,13 +120,19 @@ const TestPage: React.FC = () => {
             Test with Missing Fields
           </button>
           
-          <div className="mt-6 p-4 bg-gray-100 rounded-lg">
+          <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+            <p className="text-sm text-blue-800 font-semibold mb-2">
+              ⚡ Quick Test (Recommended)
+            </p>
+            <p className="text-xs text-blue-600 mb-3">
+              Codes expire in 5 minutes! Use "Generate Fresh Test Code" for immediate testing.
+            </p>
             <p className="text-sm text-gray-600">
               <strong>Instructions:</strong>
-              <br />1. Open browser dev tools (F12)
-              <br />2. Go to Console tab
-              <br />3. Click buttons above to test different scenarios
-              <br />4. Watch console logs for detailed debugging info
+              <br />1. Open browser dev tools (F12) → Console tab
+              <br />2. Click "🔄 Generate Fresh Test Code" 
+              <br />3. Watch console logs for detailed debugging info
+              <br />4. Should redirect to dashboard on success!
             </p>
           </div>
         </div>
