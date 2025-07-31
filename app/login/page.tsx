@@ -8,7 +8,7 @@ const LoginPage: React.FC = () => {
     // Redirect to the backend's GitHub OAuth endpoint
     // The backend will handle the OAuth flow and redirect back with the code
     console.log("🚀 Redirecting to GitHub OAuth...");
-    window.location.href = "http://localhost:8000/api/v2/user/login";
+    window.location.href = "https://backend.vibesec.app/api/v2/user/login";
   };
 
   return (

@@ -67,7 +67,7 @@ const CodeExchange: React.FC = () => {
 
         const response = await axios.post(
           // "https://backend.vibesec.app/api/v2/admin/getAllUserPayments",
-          "http://localhost:8000/api/v2/user/exchangeCode",
+          "https://backend.vibesec.app/api/v2/user/exchangeCode",
 
           { code: codeData },
           {
