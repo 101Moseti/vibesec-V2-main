@@ -7,8 +7,28 @@ const LoginPage: React.FC = () => {
   const handleGitHubLogin = () => {
     // Redirect to the backend's GitHub OAuth endpoint
     // The backend will handle the OAuth flow and redirect back with the code
-    console.log("🚀 Redirecting to GitHub OAuth...");
+    console.log("🚀 Redirecting to GitHub OAuth via backend...");
     window.location.href = "http://localhost:8000/api/v2/user/login";
+  };
+
+  const generateTestCode = async () => {
+    // For development: generate a fresh test code
+    try {
+      console.log("🔄 Generating fresh test code...");
+      const response = await fetch("http://localhost:8000/api/v2/user/test-generate-code");
+      const data = await response.json();
+      
+      if (data.code_exchange) {
+        console.log("✅ Fresh code generated, redirecting...");
+        const encodedCode = encodeURIComponent(data.code_exchange);
+        window.location.href = `/?code=${encodedCode}`;
+      } else {
+        alert("Failed to generate test code");
+      }
+    } catch (error) {
+      console.error("❌ Error generating test code:", error);
+      alert(`Error: ${error}`);
+    }
   };
 
   return (
@@ -23,23 +43,50 @@ const LoginPage: React.FC = () => {
           </p>
         </div>
 
-        <button
-          onClick={handleGitHubLogin}
-          className="w-full px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors flex items-center justify-center gap-3"
-        >
-          <Github className="w-5 h-5" />
-          Sign in with GitHub
-        </button>
+        <div className="space-y-3">
+          <button
+            onClick={generateTestCode}
+            className="w-full px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center gap-3"
+          >
+            <Github className="w-5 h-5" />
+            🔄 Quick Login (Test Code)
+          </button>
+          
+          <button
+            onClick={handleGitHubLogin}
+            className="w-full px-6 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors flex items-center justify-center gap-3"
+          >
+            <Github className="w-5 h-5" />
+            GitHub OAuth (Production)
+          </button>
+        </div>
 
-        <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+        <div className="mt-6 p-4 bg-green-50 rounded-lg border border-green-200">
+          <p className="text-sm text-green-800 font-semibold mb-2">
+            ⚡ For Development: Quick Login
+          </p>
+          <p className="text-xs text-green-600 mb-2">
+            Uses the backend's test endpoint to generate a fresh authentication code.
+          </p>
           <p className="text-sm text-gray-600">
             <strong>How it works:</strong>
             <br />
-            1. Click "Sign in with GitHub"
+            1. Click "Quick Login (Test Code)"
             <br />
-            2. Authorize VibeSec on GitHub
+            2. Backend generates fresh test code
             <br />
-            3. You'll be redirected back with authentication
+            3. Automatically logs you in
+            <br />
+            4. Redirects to dashboard
+          </p>
+        </div>
+
+        <div className="mt-4 p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+          <p className="text-sm text-yellow-800 font-semibold mb-1">
+            ⚠️ Production OAuth Note
+          </p>
+          <p className="text-xs text-yellow-600">
+            The GitHub OAuth button redirects to production. For real GitHub OAuth in development, the GitHub App needs to be configured with local redirect URIs.
           </p>
         </div>
       </div>
