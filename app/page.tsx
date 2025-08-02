@@ -23,16 +23,9 @@ const CodeExchange: React.FC = () => {
       try {
         const url = new URL(window.location.href);
         const codeParam = url.searchParams.get("code");
-        
-        // DEBUG: Log current URL and all parameters
-        console.log("🔍 DEBUG: Current URL:", window.location.href);
-        console.log("🔍 DEBUG: All URL params:", Object.fromEntries(url.searchParams));
-        console.log("🔍 DEBUG: Code parameter:", codeParam);
 
         if (!codeParam) {
           if (authState === "success") return;
-          console.log("❌ DEBUG: No code parameter found in URL - redirecting to login");
-          // Redirect to login page instead of showing error
           window.location.href = "/login";
           return;
         }
@@ -40,93 +33,58 @@ const CodeExchange: React.FC = () => {
         url.searchParams.delete("code");
         window.history.replaceState({}, document.title, url.toString());
 
-        console.log("🔍 DEBUG: Raw code param:", codeParam);
-        
         const decodedCode = decodeURIComponent(codeParam);
-        console.log("🔍 DEBUG: Decoded code:", decodedCode);
         
         let codeData;
         try {
           codeData = JSON.parse(decodedCode);
-          console.log("🔍 DEBUG: Parsed code data:", codeData);
         } catch (parseError) {
-          console.log("❌ DEBUG: JSON parse error:", parseError);
-          setAuthError("Invalid code format - not valid JSON: " + decodedCode);
+          setAuthError("Invalid authentication code format");
           setAuthState("error");
           return;
         }
 
         if (!codeData.data || !codeData.signature) {
-          console.log("❌ DEBUG: Missing data or signature:", { data: codeData.data, signature: codeData.signature });
-          setAuthError("Invalid code format - missing data or signature. Got: " + JSON.stringify(codeData));
+          setAuthError("Invalid authentication code");
           setAuthState("error");
           return;
         }
 
-        console.log("🚀 DEBUG: Sending request to backend with code:", codeData);
-
         const response = await axios.post(
-          // "https://backend.vibesec.app/api/v2/admin/getAllUserPayments",
           "https://backend.vibesec.app/api/v2/user/exchangeCode",
-
           { code: codeData },
           {
             headers: { "Content-Type": "application/json" },
             withCredentials: true,
             signal: controller.signal,
-            validateStatus: () => true, // Prevent Axios from throwing on 401
+            validateStatus: () => true,
           }
         );
-
-        console.log("📝 DEBUG: Backend response status:", response.status);
-        console.log("📝 DEBUG: Backend response headers:", response.headers);
-        console.log("📝 DEBUG: Backend response data:", response.data);
         
         if (response.data?.token) {
-          console.log("🔑 DEBUG: Storing tokens...");
           localStorage.setItem("session-token", response.data.token)
           localStorage.setItem("csrf", response.data.csrf)
           localStorage.setItem("user_id", response.data.user_id)
 
-          // Set cookies (session-token and X-CSTF-Token)
           document.cookie = `session-token=${response.data.token}; path=/; SameSite=Strict; Secure`;
           document.cookie = `X-CSRF-Token=${response.data.csrf}; path=/; SameSite=Strict; Secure`;
-          console.log("🍪 DEBUG: Cookies set successfully");
-        } else {
-          console.log("⚠️ DEBUG: No token in response data");
         }
 
         if (response.status >= 200 && response.status < 300) {
-          console.log("✅ DEBUG: Authentication successful!");
           setAuthState("success");
           setRedirecting(true);
 
           setTimeout(() => {
-            console.log("🔄 DEBUG: Redirecting to dashboard...");
             window.location.href = "/dashboard";
           }, 1000);
         } else {
-          console.log("❌ DEBUG: Authentication failed with status:", response.status);
-          console.log("❌ DEBUG: Error response:", response.data);
-          setAuthError(response.data?.error || `Authentication failed (Status: ${response.status})`);
+          setAuthError(response.data?.error || "Authentication failed");
           setAuthState("error");
         }
       } catch (error: any) {
-        if (error?.name === "AbortError") {
-          console.log("🚫 DEBUG: Request aborted");
-          return;
-        }
-        console.error("💥 DEBUG: Unexpected error during authentication:", error);
-        console.error("💥 DEBUG: Error name:", error?.name);
-        console.error("💥 DEBUG: Error message:", error?.message);
-        console.error("💥 DEBUG: Error stack:", error?.stack);
+        if (error?.name === "AbortError") return;
         
-        if (error?.response) {
-          console.error("💥 DEBUG: Error response status:", error.response.status);
-          console.error("💥 DEBUG: Error response data:", error.response.data);
-        }
-        
-        setAuthError(`Authentication failed: ${error?.message || 'Unknown error'}. Please try again.`);
+        setAuthError("Authentication failed. Please try again.");
         setAuthState("error");
       }
     };

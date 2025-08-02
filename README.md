@@ -1,37 +1,91 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# VibeSec Frontend
+
+A secure authentication frontend for VibeSec built with Next.js 15 and TypeScript.
+
+## Features
+
+- 🔐 **GitHub OAuth Authentication** - Secure login via GitHub
+- 🛡️ **JWT & CSRF Protection** - Industry-standard security
+- 🍪 **Secure Cookie Management** - HttpOnly and SameSite cookies
+- 📱 **Responsive Design** - Modern UI with Tailwind CSS
+- ⚡ **Fast & Reliable** - Built with Next.js 15 and Turbopack
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+ 
+- npm or yarn
+- VibeSec backend running
+
+### Installation
 
 ```bash
+# Clone the repository
+git clone <repository-url>
+cd vibesec-frontend
+
+# Install dependencies
+npm install
+
+# Start development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to access the application.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Authentication Flow
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **Login** (`/login`) - GitHub OAuth login page
+2. **OAuth Redirect** - GitHub handles user authorization
+3. **Code Exchange** (`/`) - Exchanges OAuth code for session tokens
+4. **Dashboard** (`/dashboard`) - Protected user area
 
-## Learn More
+## Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+app/
+├── dashboard/          # Protected dashboard page
+├── login/             # GitHub OAuth login page  
+├── globals.css        # Global styles
+├── layout.tsx         # Root layout
+└── page.tsx          # OAuth code exchange handler
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Security Features
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **CSRF Protection** - Cross-site request forgery prevention
+- **Secure Cookies** - HttpOnly, Secure, SameSite attributes
+- **JWT Tokens** - Stateless authentication
+- **OAuth 2.0** - Industry-standard authorization
 
-## Deploy on Vercel
+## Tech Stack
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Framework**: Next.js 15 with App Router
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS v4
+- **HTTP Client**: Axios
+- **Icons**: Lucide React
+- **Authentication**: GitHub OAuth + JWT
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# vibesec-test-frontend
+## Environment
+
+- **Backend**: `https://backend.vibesec.app`
+- **OAuth Provider**: GitHub
+- **Deployment**: Vercel-ready
+
+## Development
+
+```bash
+# Development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Start production server
+npm start
+
+# Lint code
+npm run lint
+```

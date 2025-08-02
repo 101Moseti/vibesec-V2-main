@@ -1,93 +1,82 @@
 "use client";
 
 import React from "react";
-import { Github } from "lucide-react";
+import { Github, Shield } from "lucide-react";
 
 const LoginPage: React.FC = () => {
   const handleGitHubLogin = () => {
-    // Redirect to the backend's GitHub OAuth endpoint
-    // The backend will handle the OAuth flow and redirect back with the code
-    console.log("🚀 Redirecting to GitHub OAuth...");
     window.location.href = "https://backend.vibesec.app/api/v2/user/login";
-
-  };
-
-  const generateTestCode = async () => {
-    // For development: generate a fresh test code
-    try {
-      console.log("🔄 Generating fresh test code...");
-      const response = await fetch("http://localhost:8000/api/v2/user/test-generate-code");
-      const data = await response.json();
-      
-      if (data.code_exchange) {
-        console.log("✅ Fresh code generated, redirecting...");
-        const encodedCode = encodeURIComponent(data.code_exchange);
-        window.location.href = `/?code=${encodedCode}`;
-      } else {
-        alert("Failed to generate test code");
-      }
-    } catch (error) {
-      console.error("❌ Error generating test code:", error);
-      alert(`Error: ${error}`);
-    }
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full text-center">
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">
-            Welcome to VibeSec
+    <div className="min-h-screen bg-white flex items-center justify-center px-4">
+      <div className="max-w-md w-full">
+        {/* Logo and Brand */}
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-blue-600 rounded-2xl mb-6">
+            <Shield className="w-10 h-10 text-white" />
+          </div>
+          <h1 className="text-5xl font-semibold text-black tracking-tight mb-3">
+            VibeSec
           </h1>
-          <p className="text-gray-600">
-            Sign in with your GitHub account to continue
+          <p className="text-xl text-gray-600">
+            AI-Powered Security Platform
           </p>
         </div>
 
-        <div className="space-y-3">
-          <button
-            onClick={generateTestCode}
-            className="w-full px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center gap-3"
-          >
-            <Github className="w-5 h-5" />
-            🔄 Quick Login (Test Code)
-          </button>
-          
+        {/* Login Card */}
+        <div className="bg-white border border-gray-200 rounded-lg p-8 shadow-sm">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-semibold text-black mb-2">
+              Sign in to continue
+            </h2>
+            <p className="text-gray-500">
+              Connect with GitHub to access your repositories
+            </p>
+          </div>
+
           <button
             onClick={handleGitHubLogin}
-            className="w-full px-6 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors flex items-center justify-center gap-3"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-4 px-6 rounded-lg transition-all duration-200 flex items-center justify-center gap-3 shadow-sm hover:shadow-md"
           >
             <Github className="w-5 h-5" />
-            GitHub OAuth (Production)
+            Continue with GitHub
           </button>
+
+          <div className="mt-8 pt-6 border-t border-gray-200">
+            <div className="text-center">
+              <p className="text-sm text-gray-500 mb-4">
+                <strong className="text-black">What happens next:</strong>
+              </p>
+              <div className="space-y-2 text-sm text-gray-600">
+                <div className="flex items-center justify-center gap-2">
+                  <div className="w-1.5 h-1.5 bg-blue-600 rounded-full"></div>
+                  <span>Authorize VibeSec to access your repositories</span>
+                </div>
+                <div className="flex items-center justify-center gap-2">
+                  <div className="w-1.5 h-1.5 bg-blue-600 rounded-full"></div>
+                  <span>Start scanning for security vulnerabilities</span>
+                </div>
+                <div className="flex items-center justify-center gap-2">
+                  <div className="w-1.5 h-1.5 bg-blue-600 rounded-full"></div>
+                  <span>Get AI-powered security insights</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div className="mt-6 p-4 bg-green-50 rounded-lg border border-green-200">
-          <p className="text-sm text-green-800 font-semibold mb-2">
-            ⚡ For Development: Quick Login
-          </p>
-          <p className="text-xs text-green-600 mb-2">
-            Uses the backend's test endpoint to generate a fresh authentication code.
-          </p>
-          <p className="text-sm text-gray-600">
-            <strong>How it works:</strong>
-            <br />
-            1. Click "Quick Login (Test Code)"
-            <br />
-            2. Backend generates fresh test code
-            <br />
-            3. Automatically logs you in
-            <br />
-            4. Redirects to dashboard
-          </p>
-        </div>
-
-        <div className="mt-4 p-4 bg-yellow-50 rounded-lg border border-yellow-200">
-          <p className="text-sm text-yellow-800 font-semibold mb-1">
-            ⚠️ Production OAuth Note
-          </p>
-          <p className="text-xs text-yellow-600">
-            The GitHub OAuth button redirects to production. For real GitHub OAuth in development, the GitHub App needs to be configured with local redirect URIs.
+        {/* Footer */}
+        <div className="text-center mt-8">
+          <p className="text-sm text-gray-500">
+            By signing in, you agree to our{" "}
+            <a href="#" className="text-blue-600 hover:text-blue-700">
+              Terms of Service
+            </a>{" "}
+            and{" "}
+            <a href="#" className="text-blue-600 hover:text-blue-700">
+              Privacy Policy
+            </a>
           </p>
         </div>
       </div>
